@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACCESS Student Attendance Monitoring</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: #f9fafb;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: #399E3D;
+            color: white;             
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px 32px;
+        }
+
+       .header-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+       .header-icon img {
+            width: 80px;       
+            height: auto;      
+            object-fit: contain; 
+            margin-right: 15px; 
+       }     
+ 
+        .header-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .header-text p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        /* Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            padding: 16px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .stat-icon {
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .stat-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-description {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        /* Layout Grid */
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 1024px) {
+            .layout-grid {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: #6b7280;
+            padding: 8px;
+        }
+
+        .btn-ghost:hover {
+            background: #f3f4f6;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-green {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-green:hover {
+            background: #15803d;
+        }
+
+        .btn-yellow {
+            background: #ca8a04;
+            color: white;
+        }
+
+        .btn-yellow:hover {
+            background: #a16207;
+        }
+
+        .btn-red {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-red:hover {
+            background: #b91c1c;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-outline:hover {
+            background: #f9fafb;
+        }
+
+        /* Subject Grid */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .subject-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .subject-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .subject-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .subject-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            color: #374151;
+        }
+
+        .subject-description {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .subject-footer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .subject-footer svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            background: #f9fafb;
+            font-weight: 600;
+            font-size: 13px;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            color: #d1d5db;
+        }
+
+        .empty-state-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .empty-state-description {
+            font-size: 14px;
+        }
+
+        /* Back Button Header */
+        .back-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .back-header-content {
+            flex: 1;
+        }
+
+        .back-header-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .back-header-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Status Badge Colors */
+        .badge-present {
+            background: #dcfce7;
+            color: #16a34a;
+            border-color: #86efac;
+        }
+
+        .badge-late {
+            background: #fef9c3;
+            color: #ca8a04;
+            border-color: #fde047;
+        }
+
+        .badge-absent {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #fca5a5;
+        }
+
+        /* History Sidebar */
+        .history-card {
+            position: sticky;
+            top: 24px;
+        }
+
+        .history-list {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .history-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .history-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .history-header:hover {
+            background: #f3f4f6;
+        }
+
+        .history-header-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .history-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .history-date {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .history-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+        }
+
+        .history-body {
+            display: none;
+            padding: 12px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+        }
+
+        .history-body.expanded {
+            display: block;
+        }
+
+        .history-subject-name {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        /* Action Buttons Container */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Date Input */
+        input[type="date"] {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* Stats Summary in Attendance */
+        .attendance-stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        .stat-present {
+            color: #16a34a;
+        }
+
+        .stat-late {
+            color: #ca8a04;
+        }
+
+        .stat-absent {
+            color: #dc2626;
+        }
+
+        /* Footer */
+        footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 48px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-success {
+            border-left: 4px solid #16a34a;
+        }
+
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            color: #16a34a;
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Text Right */
+        .text-right {
+            text-align: right;
+        }
+
+        /* Scrollbar Styling */
+        .history-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: #f3f4f6;
+            border-radius: 3px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="header-content">
+                <div class="header-icon">
+                     <img src="image/qccesslogo.png" alt="Header Icon" width="40" height="40">
+                </div>
+                <div class="header-text">
+                    <h1>ACCESS</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Statistics Cards -->
+        <div class="stats-grid" id="stats-grid"></div>
+
+        <!-- Main Layout -->
+        <div class="layout-grid">
+            <!-- Main Content Area -->
+            <div id="main-content"></div>
+
+            <!-- Sidebar - History -->
+            <div>
+                <div class="card history-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span id="history-title">Attendance History</span>
+                        </div>
+                        <p class="stat-description" id="history-count">0 sessions recorded</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="history-list" id="history-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© ACCESS 2026</p>
+    </footer>
+
+    <!-- Subject Modal -->
+    <div class="modal" id="subject-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Subject</h3>
+            </div>
+            <div class="modal-body">
+                <form id="subject-form">
+                    <div class="form-group">
+                        <label for="subject-name">Subject Name *</label>
+                        <input type="text" id="subject-name" placeholder="e.g., Introduction to Programming" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject-code">Subject Code *</label>
+                        <input type="text" id="subject-code" placeholder="e.g., CS101" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject-description">Description (Optional)</label>
+                        <textarea id="subject-description" placeholder="Brief description of the subject"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeSubjectModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="submitSubject()">Create Subject</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Modal -->
+    <div class="modal" id="student-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="student-modal-title">Register Student</h3>
+            </div>
+            <div class="modal-body">
+                <form id="student-form">
+                    <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                            <label for="student-fullname">Full Name *</label>
+                            <input type="text" id="student-fullname" placeholder="Enter full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-id">Student ID Number *</label>
+                            <input type="text" id="student-id" placeholder="Enter student ID" required>
+                        </div>
+                    </div>
+                    <div class="form-grid form-grid-2">
+                        <div class="form-group">
+                            <label for="student-year">College Year *</label>
+                            <select id="student-year" required>
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3">3rd Year</option>
+                                <option value="4">4th Year</option>
+                                <option value="5">5th Year</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-course">Course/Program *</label>
+                            <input type="text" id="student-course" placeholder="e.g., Computer Science, Engineering" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeStudentModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="submitStudent()">Register Student</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage
+        const STORAGE_KEYS = {
+            STUDENTS: 'attendance_students_v3',
+            SUBJECTS: 'attendance_subjects_v2',
+            SESSIONS: 'attendance_sessions_v3'
+        };
+
+        let subjects = JSON.parse(localStorage.getItem(STORAGE_KEYS.SUBJECTS)) || [];
+        let students = JSON.parse(localStorage.getItem(STORAGE_KEYS.STUDENTS)) || [];
+        let sessions = JSON.parse(localStorage.getItem(STORAGE_KEYS.SESSIONS)) || [];
+        let currentView = 'subjects';
+        let selectedSubjectId = null;
+        let attendanceMap = {};
+
+        // Save Data
+        function saveData() {
+            localStorage.setItem(STORAGE_KEYS.SUBJECTS, JSON.stringify(subjects));
+            localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(students));
+            localStorage.setItem(STORAGE_KEYS.SESSIONS, JSON.stringify(sessions));
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) existingToast.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-success';
+            toast.innerHTML = `
+                <svg class="toast-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="toast-message">${message}</div>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Statistics
+        function renderStatistics() {
+            const totalStudents = students.length;
+            const totalSubjects = subjects.length;
+            const totalSessions = sessions.length;
+
+            let totalPresent = 0, totalAbsent = 0, totalLate = 0;
+            sessions.forEach(session => {
+                session.records.forEach(record => {
+                    if (record.status === 'Present') totalPresent++;
+                    else if (record.status === 'Absent') totalAbsent++;
+                    else if (record.status === 'Late') totalLate++;
+                });
+            });
+
+            const totalRecords = totalPresent + totalAbsent + totalLate;
+            const presentPercentage = totalRecords > 0 ? ((totalPresent / totalRecords) * 100).toFixed(1) : '0';
+            const absentPercentage = totalRecords > 0 ? ((totalAbsent / totalRecords) * 100).toFixed(1) : '0';
+            const latePercentage = totalRecords > 0 ? ((totalLate / totalRecords) * 100).toFixed(1) : '0';
+
+            const stats = [
+                { title: 'Subjects', value: totalSubjects, description: `${totalSessions} sessions`, color: 'text-purple-600', bg: 'background:#f3e8ff', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
+                { title: 'Students', value: totalStudents, description: 'Total enrolled', color: '#2563eb', bg: 'background:#eff6ff', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+                { title: 'Present', value: totalPresent, description: `${presentPercentage}% overall`, color: '#16a34a', bg: 'background:#f0fdf4', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+                { title: 'Late', value: totalLate, description: `${latePercentage}% overall`, color: '#ca8a04', bg: 'background:#fefce8', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+                { title: 'Absent', value: totalAbsent, description: `${absentPercentage}% overall`, color: '#dc2626', bg: 'background:#fef2f2', icon: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' }
+            ];
+
+            const statsGrid = document.getElementById('stats-grid');
+            statsGrid.innerHTML = stats.map(stat => `
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">${stat.title}</div>
+                        <div class="stat-icon" style="${stat.bg}">
+                            <svg style="color:${stat.color}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${stat.icon}"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">${stat.value}</div>
+                    <div class="stat-description">${stat.description}</div>
+                </div>
+            `).join('');
+        }
+
+        // Render Subjects View
+        function renderSubjects() {
+            const mainContent = document.getElementById('main-content');
+            const studentCounts = {};
+            subjects.forEach(subject => {
+                studentCounts[subject.id] = students.filter(s => s.subjectId === subject.id).length;
+            });
+
+            const subjectsHTML = subjects.length === 0 ? `
+                <div class="empty-state">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <div class="empty-state-title">No subjects created yet</div>
+                    <div class="empty-state-description">Click "Create Subject" to add your first subject</div>
+                </div>
+            ` : `
+                <div class="subject-grid">
+                    ${subjects.map(subject => `
+                        <div class="subject-card" onclick="selectSubject('${subject.id}')">
+                            <div class="subject-card-header">
+                                <div style="flex:1">
+                                    <div class="subject-card-title">${subject.name}</div>
+                                    <span class="badge">${subject.code}</span>
+                                </div>
+                                <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); deleteSubject('${subject.id}')">
+                                    <svg style="color:#dc2626" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            ${subject.description ? `<div class="subject-description">${subject.description}</div>` : ''}
+                            <div class="subject-footer">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                <span>${studentCounts[subject.id] || 0} students</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            mainContent.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-flex">
+                            <div class="card-title">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                                My Subjects (${subjects.length})
+                            </div>
+                            <button class="btn btn-primary" onclick="openSubjectModal()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                </svg>
+                                Create Subject
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        ${subjectsHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Students View
+        function renderStudents() {
+            const subject = subjects.find(s => s.id === selectedSubjectId);
+            if (!subject) return;
+
+            const subjectStudents = students.filter(s => s.subjectId === selectedSubjectId);
+            const mainContent = document.getElementById('main-content');
+
+            const getYearSuffix = (year) => {
+                if (year === '1') return 'st';
+                if (year === '2') return 'nd';
+                if (year === '3') return 'rd';
+                return 'th';
+            };
+
+            const studentsTable = subjectStudents.length === 0 ? `
+                <div class="empty-state">
+                    No students registered for this subject yet. Click "Add Student" to register your first student.
+                </div>
+            ` : `
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Student ID</th>
+                                <th>Year</th>
+                                <th>Course</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${subjectStudents.map(student => `
+                                <tr>
+                                    <td>${student.fullName}</td>
+                                    <td>${student.studentId}</td>
+                                    <td>${student.year}${getYearSuffix(student.year)} Year</td>
+                                    <td>${student.course}</td>
+                                    <td class="text-right">
+                                        <button class="btn btn-ghost btn-sm" onclick="deleteStudent('${student.id}')">
+                                            <svg style="color:#dc2626" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            mainContent.innerHTML = `
+                <div class="card" style="margin-bottom:16px">
+                    <div class="back-header">
+                        <button class="btn btn-ghost btn-sm" onclick="backToSubjects()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                        </button>
+                        <div class="back-header-content">
+                            <div class="back-header-title">${subject.name}</div>
+                            <div class="back-header-meta">
+                                <span class="badge">${subject.code}</span>
+                                <span style="font-size:13px;color:#6b7280">• ${subjectStudents.length} students</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-flex">
+                            <div class="card-title">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                Students in ${subject.code}
+                            </div>
+                            <button class="btn btn-primary" onclick="openStudentModal()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                                </svg>
+                                Add Student
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        ${studentsTable}
+                    </div>
+                </div>
+                ${subjectStudents.length > 0 ? `
+                    <div style="margin-top:16px;display:flex;justify-content:flex-end">
+                        <button class="btn btn-primary" style="padding:12px 24px" onclick="goToAttendance()">
+                            Mark Attendance for this Subject
+                        </button>
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        // Render Attendance View
+        function renderAttendance() {
+            const subject = subjects.find(s => s.id === selectedSubjectId);
+            if (!subject) return;
+
+            const subjectStudents = students.filter(s => s.subjectId === selectedSubjectId);
+            const mainContent = document.getElementById('main-content');
+            const today = new Date().toISOString().split('T')[0];
+
+            // Initialize attendance map
+            attendanceMap = {};
+            subjectStudents.forEach(student => {
+                attendanceMap[student.id] = 'Present';
+            });
+
+            const getYearSuffix = (year) => {
+                if (year === '1') return 'st';
+                if (year === '2') return 'nd';
+                if (year === '3') return 'rd';
+                return 'th';
+            };
+
+            const attendanceTable = subjectStudents.length === 0 ? `
+                <div class="empty-state">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                    </svg>
+                    <div class="empty-state-title">No students registered</div>
+                    <div class="empty-state-description">Please register students for this subject first</div>
+                </div>
+            ` : `
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Student ID</th>
+                                <th>Year</th>
+                                <th>Course</th>
+                                <th>Attendance Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${subjectStudents.map(student => `
+                                <tr>
+                                    <td>${student.fullName}</td>
+                                    <td>${student.studentId}</td>
+                                    <td>${student.year}${getYearSuffix(student.year)}</td>
+                                    <td>${student.course}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-green attendance-btn" data-student="${student.id}" data-status="Present" onclick="setAttendanceStatus('${student.id}', 'Present')">
+                                                Present
+                                            </button>
+                                            <button class="btn btn-sm btn-outline attendance-btn" data-student="${student.id}" data-status="Late" onclick="setAttendanceStatus('${student.id}', 'Late')">
+                                                Late
+                                            </button>
+                                            <button class="btn btn-sm btn-outline attendance-btn" data-student="${student.id}" data-status="Absent" onclick="setAttendanceStatus('${student.id}', 'Absent')">
+                                                Absent
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            mainContent.innerHTML = `
+                <div class="card" style="margin-bottom:16px">
+                    <div class="back-header">
+                        <button class="btn btn-ghost btn-sm" onclick="backToStudents()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                        </button>
+                        <div class="back-header-content">
+                            <div class="back-header-title">Mark Attendance - ${subject.name}</div>
+                            <span class="badge">${subject.code}</span>
+                        </div>
+                    </div>
+                </div>
+                ${subjectStudents.length > 0 ? `
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-header-flex">
+                                <div class="card-title">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                                    </svg>
+                                    Class Attendance
+                                </div>
+                                <div style="display:flex;align-items:center;gap:8px">
+                                    <label style="font-size:14px;font-weight:500;color:#374151">Date:</label>
+                                    <input type="date" id="attendance-date" value="${today}">
+                                </div>
+                            </div>
+                            <div class="attendance-stats">
+                                <span class="stat-present">✓ Present: <span id="stat-present">${subjectStudents.length}</span></span>
+                                <span class="stat-late">⏱ Late: <span id="stat-late">0</span></span>
+                                <span class="stat-absent">✗ Absent: <span id="stat-absent">0</span></span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            ${attendanceTable}
+                            <div style="margin-top:24px;display:flex;justify-content:flex-end">
+                                <button class="btn btn-primary" style="padding:12px 24px" onclick="saveAttendance()">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                                    </svg>
+                                    Save Attendance
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ` : attendanceTable}
+            `;
+        }
+
+        // Update attendance statistics
+        function updateAttendanceStats() {
+            const present = Object.values(attendanceMap).filter(s => s === 'Present').length;
+            const late = Object.values(attendanceMap).filter(s => s === 'Late').length;
+            const absent = Object.values(attendanceMap).filter(s => s === 'Absent').length;
+
+            document.getElementById('stat-present').textContent = present;
+            document.getElementById('stat-late').textContent = late;
+            document.getElementById('stat-absent').textContent = absent;
+        }
+
+        // Set attendance status
+        function setAttendanceStatus(studentId, status) {
+            attendanceMap[studentId] = status;
+            
+            // Update button styles
+            const buttons = document.querySelectorAll(`[data-student="${studentId}"]`);
+            buttons.forEach(btn => {
+                const btnStatus = btn.getAttribute('data-status');
+                if (btnStatus === status) {
+                    btn.className = 'btn btn-sm';
+                    if (status === 'Present') btn.classList.add('btn-green');
+                    else if (status === 'Late') btn.classList.add('btn-yellow');
+                    else if (status === 'Absent') btn.classList.add('btn-red');
+                } else {
+                    btn.className = 'btn btn-sm btn-outline';
+                }
+            });
+
+            updateAttendanceStats();
+        }
+
+        // Save attendance
+        function saveAttendance() {
+            const date = document.getElementById('attendance-date').value;
+            const records = Object.entries(attendanceMap).map(([studentId, status]) => ({
+                studentId,
+                status
+            }));
+
+            const newSession = {
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                subjectId: selectedSubjectId,
+                date,
+                records
+            };
+
+            sessions.push(newSession);
+            saveData();
+            showToast('Attendance saved successfully!');
+            
+            currentView = 'subjects';
+            selectedSubjectId = null;
+            render();
+        }
+
+        // Render History
+        function renderHistory() {
+            const historyList = document.getElementById('history-list');
+            const historyTitle = document.getElementById('history-title');
+            const historyCount = document.getElementById('history-count');
+
+            const filteredSessions = selectedSubjectId 
+                ? sessions.filter(s => s.subjectId === selectedSubjectId)
+                : sessions;
+
+            const sortedSessions = [...filteredSessions].sort((a, b) => 
+                new Date(b.date).getTime() - new Date(a.date).getTime()
+            );
+
+            const selectedSubject = selectedSubjectId ? subjects.find(s => s.id === selectedSubjectId) : null;
+
+            historyTitle.textContent = selectedSubject ? `History - ${selectedSubject.code}` : 'Attendance History';
+            historyCount.textContent = `${sortedSessions.length} session${sortedSessions.length !== 1 ? 's' : ''} recorded`;
+
+            if (sortedSessions.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-state">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <div class="empty-state-description">
+                            ${selectedSubject ? `No attendance history for ${selectedSubject.code} yet` : 'No attendance history yet'}
+                        </div>
+                        <div class="empty-state-description" style="font-size:12px;margin-top:4px">
+                            Mark attendance to create your first session
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            historyList.innerHTML = sortedSessions.map(session => {
+                const subject = subjects.find(s => s.id === session.subjectId);
+                const present = session.records.filter(r => r.status === 'Present').length;
+                const late = session.records.filter(r => r.status === 'Late').length;
+                const absent = session.records.filter(r => r.status === 'Absent').length;
+
+                const dateObj = new Date(session.date);
+                const formattedDate = dateObj.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                return `
+                    <div class="history-item">
+                        <div class="history-header" onclick="toggleHistoryItem('${session.id}')">
+                            <div class="history-header-content">
+                                <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); toggleHistoryItem('${session.id}')">
+                                    <svg class="history-chevron-${session.id}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div class="history-info">
+                                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                                        <div class="history-date">${formattedDate}</div>
+                                        ${subject && !selectedSubject ? `<span class="badge" style="font-size:11px">${subject.code}</span>` : ''}
+                                    </div>
+                                    <div class="history-stats">
+                                        <span class="stat-present">✓ ${present}</span>
+                                        <span class="stat-late">⏱ ${late}</span>
+                                        <span class="stat-absent">✗ ${absent}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); deleteSession('${session.id}')">
+                                <svg style="color:#dc2626" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="history-body" id="history-body-${session.id}">
+                            <div class="history-subject-name">${subject?.name || ''}</div>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="font-size:12px">Name</th>
+                                            <th style="font-size:12px">ID</th>
+                                            <th style="font-size:12px">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${session.records.map(record => {
+                                            const student = students.find(s => s.id === record.studentId);
+                                            if (!student) return '';
+                                            return `
+                                                <tr>
+                                                    <td style="font-size:12px;padding:8px 12px">${student.fullName}</td>
+                                                    <td style="font-size:12px;padding:8px 12px">${student.studentId}</td>
+                                                    <td style="padding:8px 12px">
+                                                        <span class="badge badge-${record.status.toLowerCase()}">${record.status}</span>
+                                                    </td>
+                                                </tr>
+                                            `;
+                                        }).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle history item
+        function toggleHistoryItem(sessionId) {
+            const body = document.getElementById(`history-body-${sessionId}`);
+            const chevron = document.querySelector(`.history-chevron-${sessionId}`);
+            
+            if (body.classList.contains('expanded')) {
+                body.classList.remove('expanded');
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                body.classList.add('expanded');
+                chevron.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Modal Functions
+        function openSubjectModal() {
+            document.getElementById('subject-modal').classList.add('active');
+        }
+
+        function closeSubjectModal() {
+            document.getElementById('subject-modal').classList.remove('active');
+            document.getElementById('subject-form').reset();
+        }
+
+        function openStudentModal() {
+            const subject = subjects.find(s => s.id === selectedSubjectId);
+            document.getElementById('student-modal-title').textContent = `Register Student for ${subject.code}`;
+            document.getElementById('student-modal').classList.add('active');
+        }
+
+        function closeStudentModal() {
+            document.getElementById('student-modal').classList.remove('active');
+            document.getElementById('student-form').reset();
+        }
+
+        // Submit Functions
+        function submitSubject() {
+            const name = document.getElementById('subject-name').value.trim();
+            const code = document.getElementById('subject-code').value.trim();
+            const description = document.getElementById('subject-description').value.trim();
+
+            if (!name || !code) {
+                alert('Please fill in required fields');
+                return;
+            }
+
+            const newSubject = {
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                name,
+                code,
+                description
+            };
+
+            subjects.push(newSubject);
+            saveData();
+            showToast(`${name} created successfully!`);
+            closeSubjectModal();
+            render();
+        }
+
+        function submitStudent() {
+            const fullName = document.getElementById('student-fullname').value.trim();
+            const studentId = document.getElementById('student-id').value.trim();
+            const year = document.getElementById('student-year').value;
+            const course = document.getElementById('student-course').value.trim();
+
+            if (!fullName || !studentId || !course) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const newStudent = {
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                subjectId: selectedSubjectId,
+                fullName,
+                studentId,
+                year,
+                course
+            };
+
+            students.push(newStudent);
+            saveData();
+            showToast(`${fullName} registered successfully!`);
+            closeStudentModal();
+            render();
+        }
+
+        // Delete Functions
+        function deleteSubject(id) {
+            if (!confirm('Are you sure you want to delete this subject? All associated students and attendance records will be removed.')) {
+                return;
+            }
+
+            const subject = subjects.find(s => s.id === id);
+            subjects = subjects.filter(s => s.id !== id);
+            students = students.filter(s => s.subjectId !== id);
+            sessions = sessions.filter(s => s.subjectId !== id);
+            
+            saveData();
+            showToast(`${subject?.name || 'Subject'} and all its data removed`);
+            render();
+        }
+
+        function deleteStudent(id) {
+            if (!confirm('Are you sure you want to delete this student?')) {
+                return;
+            }
+
+            const student = students.find(s => s.id === id);
+            students = students.filter(s => s.id !== id);
+            
+            saveData();
+            showToast(`${student?.fullName || 'Student'} removed from registry`);
+            render();
+        }
+
+        function deleteSession(id) {
+            if (!confirm('Are you sure you want to delete this attendance session?')) {
+                return;
+            }
+
+            sessions = sessions.filter(s => s.id !== id);
+            saveData();
+            showToast('Attendance session deleted!');
+            render();
+        }
+
+        // Navigation Functions
+        function selectSubject(id) {
+            selectedSubjectId = id;
+            currentView = 'students';
+            render();
+        }
+
+        function backToSubjects() {
+            currentView = 'subjects';
+            selectedSubjectId = null;
+            render();
+        }
+
+        function backToStudents() {
+            currentView = 'students';
+            render();
+        }
+
+        function goToAttendance() {
+            currentView = 'attendance';
+            render();
+        }
+
+        // Main Render Function
+        function render() {
+            renderStatistics();
+            
+            if (currentView === 'subjects') {
+                renderSubjects();
+            } else if (currentView === 'students') {
+                renderStudents();
+            } else if (currentView === 'attendance') {
+                renderAttendance();
+            }
+
+            renderHistory();
+        }
+
+        // Close modals on outside click
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        // Initialize
+        render();
+    </script>
+</body>
+</html>
