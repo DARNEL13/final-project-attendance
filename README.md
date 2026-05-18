@@ -15,7 +15,8 @@
  note: It is designed for schools, classrooms, or organizations that need a simple way to track attendance per subject.
 
 Features
- Subject Management: Add, edit, and delete subjects.
+
+ - Subject Management: Add, edit, and delete subjects.
 
  - Student Registration: Register students with unique IDs and assign them to subjects.
 
